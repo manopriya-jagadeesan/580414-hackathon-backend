@@ -1,14 +1,21 @@
 pipeline {
-   agent any
-   tools {
-        maven 'maven 5.4.1'
-        jdk 'jdk8'
-   }
-    stage('maven Build') {
-        if (isUnix()) {
-            sh './mvn clean build'
-        } else {
-            bat 'mvn clean build'
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building..'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
         }
     }
 }
