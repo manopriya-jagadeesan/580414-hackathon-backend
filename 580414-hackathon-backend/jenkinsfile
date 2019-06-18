@@ -5,17 +5,29 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+                sh 'make' (1)
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true (2)
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
+                sh 'make check || true' (1)
+                junit '**/target/*.xml' (2)
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+                when {
+                expression {
+                    currentBuild.result == null || currentBuild.result == 'SUCCESS' (1)
+                 }
+                 }
+                steps {
+                sh 'make publish'
+                 }
             }
         }
     }
-}
+
